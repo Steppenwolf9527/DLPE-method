@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always" serverName="ssh -p 12322 root@79.141.67.124 -L 8080:localhost:8080" remoteFilesAllowedToDisappearOnAutoupload="false">
+    <serverData>
+      <paths name="ssh -p 12322 root@79.141.67.124 -L 8080:localhost:8080">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/root/DLPE-method" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>

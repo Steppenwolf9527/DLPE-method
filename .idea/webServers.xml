@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="91bf4c15-3016-4b77-9e6e-13f937bec2ff" name="ssh -p 12322 root@79.141.67.124 -L 8080:localhost:8080">
+        <fileTransfer rootFolder="/root/DLPE-method" accessType="SFTP" host="79.141.67.124" port="12322" sshConfigId="5bdb320c-a8c4-42df-8054-d57a2950a2a9" sshConfig="root@79.141.67.124:12322 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" isUseSudo="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
