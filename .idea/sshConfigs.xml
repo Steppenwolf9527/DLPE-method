@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SshConfigs">
+    <configs>
+      <sshConfig host="59.26.209.89" id="e7fe93d1-80ca-4161-81a9-79ead98049fa" keyPath="$USER_HOME$/.ssh/id_rsa" port="50850" nameFormat="DESCRIPTIVE" username="root" useOpenSSHConfig="true" />
+      <sshConfig host="79.112.4.8" id="41469902-5bdd-49e5-a20a-fd959931fa99" keyPath="$USER_HOME$/.ssh/id_rsa" port="38985" nameFormat="DESCRIPTIVE" username="root" useOpenSSHConfig="true" />
+      <sshConfig host="185.150.27.254" id="53cf1c0f-4e9d-4ed5-a935-c76266b94d34" keyPath="$USER_HOME$/.ssh/id_rsa" port="24442" nameFormat="DESCRIPTIVE" username="root" useOpenSSHConfig="true" />
+    </configs>
+  </component>
+</project>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="19e024e3-0c61-47d8-a3db-c3c23c401dac" name="ssh -p 50850 root@59.26.209.89 -L 8080:localhost:8080">
+        <fileTransfer rootFolder="/root/DLPE-method" accessType="SFTP" host="185.150.27.254" port="24442" sshConfigId="53cf1c0f-4e9d-4ed5-a935-c76266b94d34" sshConfig="root@185.150.27.254:24442 key" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" isUseSudo="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
