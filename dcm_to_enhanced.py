@@ -153,6 +153,7 @@ report = Report.generate_ct_analysis_report(
     lung_mask=lung_mask,
     lesion_mask=inpatient_lesions
 )
+
 print(report)
 print("已完成住院期炎症区域的自动分析报告")
 # 获取可见病灶（基于 TMI 论文中方法）
