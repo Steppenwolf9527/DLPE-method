@@ -5,7 +5,7 @@
       <paths name="ssh -p 12322 root@79.141.67.124 -L 8080:localhost:8080">
         <serverdata>
           <mappings>
-            <mapping deploy="/root/DLPE-method" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>

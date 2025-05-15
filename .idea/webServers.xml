@@ -3,7 +3,7 @@
   <component name="WebServers">
     <option name="servers">
       <webServer id="91bf4c15-3016-4b77-9e6e-13f937bec2ff" name="ssh -p 12322 root@79.141.67.124 -L 8080:localhost:8080">
-        <fileTransfer rootFolder="/root/DLPE-method" accessType="SFTP" host="79.141.67.124" port="12322" sshConfigId="5bdb320c-a8c4-42df-8054-d57a2950a2a9" sshConfig="root@79.141.67.124:12322 key" keyPair="true">
+        <fileTransfer rootFolder="/root/DLPE-method" accessType="SFTP" host="185.150.27.254" port="24949" sshConfigId="304613fb-be9d-415a-942f-ada5636244f1" sshConfig="root@185.150.27.254:24949 key" keyPair="true">
           <advancedOptions>
             <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" isUseSudo="true" />
           </advancedOptions>
