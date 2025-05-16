@@ -6,11 +6,12 @@ import Interface.visualize_example as visualize
 import Tool_Functions.Functions as Functions
 import Tool_Functions.generate_ct_analysis_report as Report
 import Tool_Functions.visualize_mask_mesh as Mesh
+import numpy as np
 """
 每一例胸部 CT 增强处理约耗时一分钟，需使用 V100 GPU。
 """
 
-
+print("开始执行")
 batch_size = 4  # 推理时每次送入模型的批大小，约占 3GB GPU 显存
 
 # 模型所在目录
@@ -61,7 +62,6 @@ blood_vessel_mask = predictor.get_prediction_blood_vessel(
 )
 
 # -------------------------- 步骤五：肺实质增强 --------------------------
-
 # 根据提取的肺部/气道/血管 mask，去除非肺实质结构，进行增强
 DLPE_enhanced, w_l, w_w = enhancement.remove_airway_and_blood_vessel_general_sampling(
     rescaled_ct_array,
@@ -101,18 +101,18 @@ Functions.image_save(
 )
 
 # 保存增强后的三维 CT 数组（.npz 文件）
-# Functions.save_np_array(
-#     enhance_array_output_directory,
-#     'enhanced_ct_name',
-#     DLPE_enhanced,
-#     compress=True
-# )
-
-Functions.save_np_as_nii_gz(
+Functions.save_np_array(
     enhance_array_output_directory,
     'enhanced_ct_name',
-    DLPE_enhanced
+    DLPE_enhanced,
+    compress=True
 )
+
+# Functions.save_np_as_nii_gz(
+#     enhance_array_output_directory,
+#     'enhanced_ct_name',
+#     DLPE_enhanced
+# )
 Mesh.generate_combined_mask_mesh(
     lung_mask=lung_mask,
     airway_mask=airway_mask,
@@ -121,6 +121,7 @@ Mesh.generate_combined_mask_mesh(
 )
 # -------------------------- 步骤七：COVID-19 病灶分割 --------------------------
 
+print("For lung lesion segmentation in COVID-19 patients only")
 # 仅适用于 COVID-19 病人的肺部病灶分割（注意：只适用于随访或住院人群）
 
 # 加载增强模型权重路径
@@ -141,13 +142,40 @@ inpatient_lesions = predict_enhanced.get_invisible_covid_19_lesion_from_enhanced
     follow_up=False,
     batch_size=batch_size
 )
-Functions.save_np_as_nii_gz(
-    follow_up_lesions,
-    'inpatient_lesion_mask',
-    DLPE_enhanced
-)
-print(" 已完成住院期炎症区域的自动标注，并保存为 'inpatient_lesion_mask.npz'")
 
+Functions.save_np_array(
+    enhance_array_output_directory,
+    'inpatient_lesion_mask',
+    inpatient_lesions,
+    compress=True
+)
+# -------- 合并掩膜为多标签图 --------
+# 标签定义：
+# 0 = 背景
+# 1 = 肺部
+# 2 = 感染区域（在肺部基础上进一步覆盖）
+
+# 转换数据类型为 uint8（节省空间 + 适用于 NIfTI）
+combined_mask = lung_mask.astype(np.uint8)
+
+# 将感染区域设为标签 2（覆盖肺部）
+combined_mask[inpatient_lesions == 1] = 2
+print("The automatic annotation of inflammatory areas during the hospital stay has been completed and saved as 'inpatient_lesion_mask.npz'.")
+# -------- 导出为 .nii.gz --------
+# 创建 affine（空间信息）为单位矩阵，或替换为原 CT 的 affine（如果有）
+affine = np.eye(4)
+
+# 创建 Nifti 图像对象
+nii_img = nib.Nifti1Image(combined_mask, affine)
+
+# 设置保存路径
+output_dir = enhance_array_output_directory  # 你的保存目录
+output_path = os.path.join(output_dir, 'combined_lung_infection_mask.nii.gz')
+
+# 保存
+nib.save(nii_img, output_path)
+
+print(f" The merged mask has been saved as：{output_path}")
 report = Report.generate_ct_analysis_report(
     dicom_dir=dcm_directory,
     lung_mask=lung_mask,
@@ -155,7 +183,7 @@ report = Report.generate_ct_analysis_report(
 )
 
 print(report)
-print("已完成住院期炎症区域的自动分析报告")
+print("The automatic analysis report of inflammatory areas during the hospital stay has been completed.")
 # 获取可见病灶（基于 TMI 论文中方法）
 # 获取可见病灶
 visible_lesions = predictor.predict_covid_19_infection_rescaled_array(

@@ -35,7 +35,7 @@ def generate_ct_analysis_report(dicom_dir, lung_mask, lesion_mask):
     """
     try:
         spacing = extract_spacing_from_dicom(dicom_dir)
-        print(f"✅ 自动提取 spacing 成功: {spacing} (单位 mm)")
+        print(f"Successful automatic extraction of spacing.: {spacing} (单位 mm)")
     except Exception as e:
         print(f"⚠️ 无法自动提取 spacing，默认使用 (1.0, 1.0, 1.0): {e}")
         spacing = (1.0, 1.0, 1.0)
@@ -50,10 +50,10 @@ def generate_ct_analysis_report(dicom_dir, lung_mask, lesion_mask):
     lesion_ratio = (lesion_volume_ml / lung_volume_ml) * 100 if lung_volume_ml > 0 else 0
 
     # 输出分析报告
-    print("\n📊 ======= CT 病灶分析报告 =======")
-    print(f"病灶体积: {lesion_volume_ml:.2f} mL")
-    print(f"肺部体积: {lung_volume_ml:.2f} mL")
-    print(f"病灶占肺部比例: {lesion_ratio:.2f} %")
+    print("\n📊 ======= CT Lesion Analysis Report=======")
+    print(f"Lesion Volume: {lesion_volume_ml:.2f} mL")
+    print(f"Lung Volume: {lung_volume_ml:.2f} mL")
+    print(f"Proportion of Lesion to Lung: {lesion_ratio:.2f} %")
     print("==================================\n")
 
     return {
