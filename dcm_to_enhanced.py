@@ -7,6 +7,9 @@ import Tool_Functions.Functions as Functions
 import Tool_Functions.generate_ct_analysis_report as Report
 import Tool_Functions.visualize_mask_mesh as Mesh
 import numpy as np
+import nibabel as nib
+import os
+
 """
 每一例胸部 CT 增强处理约耗时一分钟，需使用 V100 GPU。
 """
@@ -15,13 +18,13 @@ print("开始执行")
 batch_size = 4  # 推理时每次送入模型的批大小，约占 3GB GPU 显存
 
 # 模型所在目录
-trained_model_top_dict = '/root/DLPE-method/trained_models/'
+trained_model_top_dict = '/home/featurize/DLPE-method/trained_models/'
 
 # 当前处理的 CT 图像目录，仅包含一例 CT（多个 .dcm 文件）
-dcm_directory = '/root/DLPE-method/example_data/COVID-19 inpatient/'
+dcm_directory = '/home/featurize/DLPE-method/example_data/COVID-19 inpatient/'
 
 # 增强图像输出保存路径
-enhance_array_output_directory = '/root/DLPE-method/example_output/'
+enhance_array_output_directory = '/home/featurize/DLPE-method/example_output/'
 
 # 设置模型加载的路径（用于 predict_rescaled 中调用模型）
 predictor.top_directory_check_point = trained_model_top_dict
@@ -107,12 +110,26 @@ Functions.save_np_array(
     DLPE_enhanced,
     compress=True
 )
+# 创建仿射矩阵（CT 一般为单位矩阵）
+affine = np.eye(4)
 
+# 创建 NIfTI 图像
+nii_img_ct = nib.Nifti1Image(DLPE_enhanced.astype(np.float32), affine)
+
+# 生成保存路径
+ct_save_path = os.path.join(enhance_array_output_directory, 'enhanced_ct_image.nii.gz')
+
+# 保存
+
+nib.save(nii_img_ct, ct_save_path)
+
+print(f"：The enhanced CT image is saved as{ct_save_path}")
 # Functions.save_np_as_nii_gz(
 #     enhance_array_output_directory,
 #     'enhanced_ct_name',
 #     DLPE_enhanced
 # )
+# -------------------------- 三维重建--------------------------
 Mesh.generate_combined_mask_mesh(
     lung_mask=lung_mask,
     airway_mask=airway_mask,
@@ -174,7 +191,7 @@ output_path = os.path.join(output_dir, 'combined_lung_infection_mask.nii.gz')
 
 # 保存
 nib.save(nii_img, output_path)
-
+# -------------------------- 报告分析--------------------------
 print(f" The merged mask has been saved as：{output_path}")
 report = Report.generate_ct_analysis_report(
     dicom_dir=dcm_directory,
